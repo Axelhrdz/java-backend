@@ -35,20 +35,13 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
 
-        try {
-            User user = authService.register(request);
+        User user = authService.register(request);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                "message", "User regsitered",
-                "id", user.getId(),
-                "email", user.getEmail()
-            ));
-
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
-                "error", e.getMessage()
-            ));
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
+            "message", "User regsitered",
+            "id", user.getId(),
+            "email", user.getEmail()
+        ));
     }
 
 

@@ -3,6 +3,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
+import com.example.demo.exception.EmailAlreadyRegisteredException;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 
@@ -37,7 +38,8 @@ public class AuthService {
         }
 
         if(userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email already registered");
+            // throw new IllegalArgumentException("Email already registered");
+            throw new EmailAlreadyRegisteredException("Email already registered");
         }
 
 
