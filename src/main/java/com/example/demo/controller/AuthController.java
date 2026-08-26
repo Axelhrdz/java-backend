@@ -38,7 +38,7 @@ public class AuthController {
         User user = authService.register(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-            "message", "User regsitered",
+            "message", "User registered",
             "id", user.getId(),
             "email", user.getEmail()
         ));
@@ -47,19 +47,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        
-        try {
-            User user = authService.login(request);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of(
-                "message", "Login sucessfully",
-                "email", user.getEmail()
-            ));
+    
+        User user = authService.login(request);
 
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
-                "error", e.getMessage()
-            ));
-        }
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of(
+            "message", "Login sucessfully",
+            "email", user.getEmail()
+        ));
 
     }
 

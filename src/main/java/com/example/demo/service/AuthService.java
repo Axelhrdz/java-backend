@@ -4,6 +4,8 @@ package com.example.demo.service;
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.exception.EmailAlreadyRegisteredException;
+import com.example.demo.exception.UserNotFoundException;
+import com.example.demo.exception.InvalidPasswordException;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 
@@ -72,14 +74,14 @@ public class AuthService {
 
         //get user by email
         var user = userRepository.findByEmail(request.getEmail())
-            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+            .orElseThrow(() -> new UserNotFoundException("User not found"));
 
             
         //Validate credentials/password
         Boolean passMatches = encoder.matches(request.getPassword(), user.getPassword());
         
         if(!passMatches) {
-            throw new IllegalArgumentException("Invalid password or email, please verify");
+            throw new InvalidPasswordException("Invalid password or email, please verify");
         }
 
         return user;

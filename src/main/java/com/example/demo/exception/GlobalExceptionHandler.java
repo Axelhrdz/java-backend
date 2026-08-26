@@ -18,5 +18,21 @@ public class GlobalExceptionHandler {
     }
 
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<?> handleUserNotFound(UserNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+            "error", e.getMessage()
+        ));
+    }
+
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<?> handleValidPassword(InvalidPasswordException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
+            "error", e.getMessage()
+        ));
+    }
+
+
 
 }
