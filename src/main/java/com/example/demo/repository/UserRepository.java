@@ -1,34 +1,11 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.User;
-// import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-// import org.springframework.stereotype.Component;
-// import org.springframework.stereotype.Repository;
-
-// import java.util.Map;
-// import java.util.HashMap;
-import java.util.Optional;
 import java.util.List;
-
-
-// public interface UserRepository extends JpaRepository<User, String> {
-//     Optional<User> findByEmail(String email);
-// }
-// public class UserRepository {
-//     private final Map<String, User> usersByEmail = new HashMap<>();
-
-//     public Optional<User> findByEmail(String email) {
-//         return Optional.ofNullable(usersByEmail.get(email));
-//     }
-
-//     public User save(User user) {
-//         usersByEmail.put(user.getEmail(), user);
-//         return user;
-//     }
-// }
+import java.util.Optional;
 
 @Repository
 public class UserRepository {
@@ -39,10 +16,8 @@ public class UserRepository {
         this.jdbc = jdbc;
     }
 
-
     public Optional<User> findByEmail(String email) {
         String sql = "SELECT id, name, email, password FROM users WHERE email = ?";
-
 
         List<User> rows = jdbc.query(
             sql,
@@ -55,11 +30,8 @@ public class UserRepository {
             email
         );
 
-
         return rows.stream().findFirst();
     }
-
-
 
     public User save(User user) {
         String sql = """
@@ -74,7 +46,6 @@ public class UserRepository {
             user.getEmail(),
             user.getPassword()
         );
-
 
         return user;
     }

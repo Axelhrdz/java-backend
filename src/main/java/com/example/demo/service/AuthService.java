@@ -40,7 +40,6 @@ public class AuthService {
         }
 
         if(userRepository.findByEmail(request.getEmail()).isPresent()) {
-            // throw new IllegalArgumentException("Email already registered");
             throw new EmailAlreadyRegisteredException("Email already registered");
         }
 
@@ -78,7 +77,7 @@ public class AuthService {
 
             
         //Validate credentials/password
-        Boolean passMatches = encoder.matches(request.getPassword(), user.getPassword());
+        boolean passMatches = encoder.matches(request.getPassword(), user.getPassword());
         
         if(!passMatches) {
             throw new InvalidPasswordException("Invalid password or email, please verify");
