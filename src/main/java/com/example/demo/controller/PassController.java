@@ -1,0 +1,36 @@
+package com.example.demo.controller;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.service.PassService;
+
+import java.util.Map;
+
+@RestController
+@RequestMapping("/pass")
+public class PassController {
+
+    private final PassService passService;
+    
+
+    public PassController(PassService passService) {
+        this.passService = passService;
+    }
+
+
+    //endpoints
+    @PostMapping("/generate")
+    public ResponseEntity<?> generatePassword() {
+
+        String password = passService.passGenerator();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body (Map.of(
+            "message", "Generate password endpoint",
+            "password", password
+        ));
+    }
+}
