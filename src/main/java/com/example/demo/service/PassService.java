@@ -1,6 +1,11 @@
 package com.example.demo.service;
 
 import java.security.SecureRandom;
+import java.time.Instant;
+import java.util.UUID;
+
+import com.example.demo.model.Password;
+import com.example.demo.repository.PasswordRepository;
 
 import org.springframework.stereotype.Service;
 
@@ -8,12 +13,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class PassService {
     
+    private final PasswordRepository passwordRepository;
 
-    public PassService() {
-
+    public PassService(PasswordRepository passwordRepository) {
+        this.passwordRepository = passwordRepository;
     }
 
-    public String passGenerator() {
+    public Password passGenerator() {
 
         int length = 20;
         String validChars  = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
@@ -30,8 +36,16 @@ public class PassService {
 
         // System.out.println("---- secure password ----");
         // System.out.println(token);
-        
 
-        return token.toString();
+        //Generate password object
+        Password password = new Password(
+            UUID.randomUUID().toString(),
+            "placeholder",
+            token.toString(),
+            Instant.now()
+        );
+
+
+        return passwordRepository.save(password);
     }
 }

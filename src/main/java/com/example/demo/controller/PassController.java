@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.model.Password;
 import com.example.demo.service.PassService;
 
 import java.util.Map;
@@ -26,11 +27,12 @@ public class PassController {
     @PostMapping("/generate")
     public ResponseEntity<?> generatePassword() {
 
-        String password = passService.passGenerator();
+        Password password = passService.passGenerator();
 
         return ResponseEntity.status(HttpStatus.CREATED).body (Map.of(
             "message", "Generate password endpoint",
-            "password", password
+            "title", password.getTitle(),
+            "password", password.getSecret()
         ));
     }
 }
