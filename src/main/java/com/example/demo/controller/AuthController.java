@@ -4,6 +4,7 @@ import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.model.User;
 import com.example.demo.service.AuthService;
+import com.example.demo.service.JwtService;
 
 import jakarta.validation.Valid;
 
@@ -26,9 +27,11 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthService authService;
+    private final JwtService jwtService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, JwtService jwtService) {
         this.authService = authService;
+        this.jwtService = jwtService;
     }
 
 
@@ -36,11 +39,13 @@ public class AuthController {
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
 
         User user = authService.register(request);
+        String token = jwtService.createToken(user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
             "message", "User registered",
             "id", user.getId(),
-            "email", user.getEmail()
+            "email", user.getEmail(),
+            "token", token
         ));
     }
 
@@ -49,10 +54,12 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
     
         User user = authService.login(request);
+        String token = jwtService.createToken(user);
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of(
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of(
             "message", "Login sucessfully",
-            "email", user.getEmail()
+            "email", user.getEmail(),
+            "token", token
         ));
 
     }
