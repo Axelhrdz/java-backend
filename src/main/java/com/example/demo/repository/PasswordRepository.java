@@ -17,13 +17,14 @@ public class PasswordRepository {
 
     public Password save(Password password) {
         String sql = """
-                INSERT INTO passwords (id, title, secret, created_at)
-                VALUES (?, ?, ?, ?)
+                INSERT INTO passwords (id, user_id, title, secret, created_at)
+                VALUES (?, ?, ?, ?, ?)
                 """;
 
         jdbc.update(
             sql,
             password.getId(),
+            password.getUserId(),
             password.getTitle(),
             password.getSecret(),
             Timestamp.from(password.getCreatedAt())

@@ -19,7 +19,11 @@ public class PassService {
         this.passwordRepository = passwordRepository;
     }
 
-    public Password passGenerator() {
+    public Password passGenerator(String userId) {
+
+        if (userId == null || userId.isBlank()) {
+            throw new IllegalArgumentException("User ID is required to generate a password");
+        }
 
         int length = 20;
         String validChars  = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
@@ -40,6 +44,7 @@ public class PassService {
         //Generate password object
         Password password = new Password(
             UUID.randomUUID().toString(),
+            userId,
             "placeholder",
             token.toString(),
             Instant.now()
