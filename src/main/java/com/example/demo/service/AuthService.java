@@ -48,7 +48,7 @@ public class AuthService {
         String hashedPassword = encoder.encode(request.getPassword());
 
         User user = new User(
-            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString().replace("-", "").substring(0, 4),
             request.getName(),
             request.getEmail(),
             hashedPassword

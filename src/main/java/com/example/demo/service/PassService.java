@@ -43,7 +43,7 @@ public class PassService {
 
         //Generate password object
         Password password = new Password(
-            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString().replace("-", "").substring(0, 4),
             userId,
             "placeholder",
             token.toString(),
