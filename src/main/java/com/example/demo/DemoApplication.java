@@ -17,7 +17,7 @@ public class DemoApplication {
 	@GetMapping("/")
 	public String home() {
 		// return "Hello World";
-		return "password_attached_user";
+		return "generate_password_options";
 	}
 
 

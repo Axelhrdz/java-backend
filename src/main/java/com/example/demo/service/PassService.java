@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.example.demo.model.Password;
 import com.example.demo.repository.PasswordRepository;
+import com.example.demo.dto.PassRequest;
 
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class PassService {
         this.passwordRepository = passwordRepository;
     }
 
-    public Password passGenerator(String userId) {
+    public Password passGenerator(String userId, PassRequest request) {
 
         if (userId == null || userId.isBlank()) {
             throw new IllegalArgumentException("User ID is required to generate a password");
@@ -38,14 +39,11 @@ public class PassService {
         }
 
 
-        // System.out.println("---- secure password ----");
-        // System.out.println(token);
-
         //Generate password object
         Password password = new Password(
             UUID.randomUUID().toString().replace("-", "").substring(0, 4),
             userId,
-            "placeholder",
+            request.getTitle(),
             token.toString(),
             Instant.now()
         );
