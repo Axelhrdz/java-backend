@@ -3,7 +3,7 @@ package com.example.demo.dto;
 import jakarta.validation.constraints.NotBlank;
 
 public class PassRequest {
-    @NotBlank(message = "Please chose a title for your new password")
+    @NotBlank(message = "Please chose a title/category for your new password")
     private String title;
     // private String secret;
 
@@ -11,8 +11,6 @@ public class PassRequest {
     public PassRequest() {
 
     }
-
-
 
     //getters - setters
     public String getTitle() {
@@ -22,14 +20,5 @@ public class PassRequest {
     public void setTitle(String title) {
         this.title = title;
     }
-
-    // public String getSecret() {
-    //     return secret;
-    // }
-
-    // public void setSecret(String secret) {
-    //     this.secret = secret;
-    // }
-
-
+    
 }

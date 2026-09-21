@@ -39,9 +39,6 @@ public class PassService {
         }
 
 
-        // System.out.println("---- secure password ----");
-        // System.out.println(token);
-
         //Generate password object
         Password password = new Password(
             UUID.randomUUID().toString().replace("-", "").substring(0, 4),
