@@ -66,4 +66,14 @@ public class GlobalExceptionHandler {
 
 
 
+    //duplicate passwors title
+    @ExceptionHandler(PassTitleAlreadyExistsException.class)
+    public ResponseEntity<?> handleDuplicatePassTitle(PassTitleAlreadyExistsException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
+            "error", e.getMessage()
+        ));
+    }
+
+
+
 }

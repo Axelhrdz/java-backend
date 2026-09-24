@@ -15,6 +15,20 @@ public class PasswordRepository {
         this.jdbc = jdbc;
     } 
 
+    public boolean existsByUserIdAndTitle(String userId, String title) {
+        String sql = """
+            SELECT EXISTS (
+                SELECT 1
+                FROM passwords
+                WHERE user_id = ? AND title = ?
+            )
+        """;
+
+        return Boolean.TRUE.equals(
+            jdbc.queryForObject(sql, Boolean.class, userId, title)
+        );
+    }
+
     public Password save(Password password) {
         String sql = """
                 INSERT INTO passwords (id, user_id, title, secret, created_at)
