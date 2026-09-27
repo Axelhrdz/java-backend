@@ -73,14 +73,14 @@ public class AuthService {
 
         //get user by email
         var user = userRepository.findByEmail(request.getEmail())
-            .orElseThrow(() -> new UserNotFoundException("User not found"));
+            .orElseThrow(() -> new UserNotFoundException("User not found - testing error"));
 
             
         //Validate credentials/password
         boolean passMatches = encoder.matches(request.getPassword(), user.getPassword());
         
         if(!passMatches) {
-            throw new InvalidPasswordException("Invalid password or email, please verify");
+            throw new InvalidPasswordException("Invalid password or email, please verify - testing error");
         }
 
         return user;

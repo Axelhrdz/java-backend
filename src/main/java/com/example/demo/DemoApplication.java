@@ -17,7 +17,7 @@ public class DemoApplication {
 	@GetMapping("/")
 	public String home() {
 		// return "Hello World";
-		return "generate_password_options";
+		return "main branch - password app";
 	}
 
 

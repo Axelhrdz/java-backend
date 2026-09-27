@@ -7,6 +7,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+//get Cookie with access token imports
+import jakarta.servlet.http.Cookie;
+
 import java.io.IOException;
 
 @Component
@@ -24,16 +27,35 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
         HttpServletResponse response,
         Object handler
     ) throws IOException {
-        String header = request.getHeader("Authorization");
+        // String header = request.getHeader("Authorization");
 
-        if(header == null || !header.startsWith("Bearer ")) {
+        // if(header == null || !header.startsWith("Bearer ")) {
+        //     unauthorized(response, "Missing or invalid Authorization header");
+        //     return false; // stop — controller never runs
+        // }
+
+        String token = null;
+
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if("access_token".equals(cookie.getName())) { 
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+
+        if(token == null || token.isBlank()) {
             unauthorized(response, "Missing or invalid Authorization header");
-            return false; // stop — controller never runs
+            return false;
         }
 
 
         try {
-            String token = header.substring(7);
+            // String token = header.substring(7);
             Claims claims = jwtService.parse(token);
             request.setAttribute("userId", claims.getSubject());
             request.setAttribute("email", claims.get("email", String.class));
