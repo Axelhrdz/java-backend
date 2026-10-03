@@ -85,4 +85,18 @@ public class AuthService {
 
         return user;
     }   
+
+
+    public User authMe(String userId) {
+        //validate if userId is null
+        if(userId == null || userId.isBlank()) {
+            throw new IllegalArgumentException("User Id is required check user info");
+        }
+
+        //find user by their id
+        var user = userRepository.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException("Not Authenticated"));
+
+        return user;
+    }
 }

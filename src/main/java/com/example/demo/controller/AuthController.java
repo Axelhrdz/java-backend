@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import java.time.Duration;
+
+//auth me response
+import com.example.demo.dto.AuthMeResponse;
+import org.springframework.web.bind.annotation.RequestAttribute;
 
 import java.util.Map;
 
@@ -90,6 +95,26 @@ public class AuthController {
             "email", user.getEmail(),
             "token", token
         ));
+
+    }
+
+
+    //auth/me -- check if user authenticated -- jwt
+    @GetMapping("/me")
+    public ResponseEntity<AuthMeResponse> authMe(@RequestAttribute("userId") String userId) {
+
+        User user = authService.authMe(userId);
+
+        AuthMeResponse response = new AuthMeResponse(
+            "User Authenticated",
+            user.getId(),
+            user.getName(),
+            user.getEmail()
+        );
+
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(response);
+
 
     }
 

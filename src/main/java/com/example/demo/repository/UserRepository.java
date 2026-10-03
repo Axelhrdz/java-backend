@@ -33,6 +33,31 @@ public class UserRepository {
         return rows.stream().findFirst();
     }
 
+
+    public Optional<User> findById(String userId) {
+        String sql = "SELECT id, name, email, password FROM users where id = ?";
+
+        List<User> rows = jdbc.query(
+            sql,
+            (rs, rowNum) -> new User(
+                rs.getString("id"),
+                rs.getString("name"),
+                rs.getString("email"),
+                rs.getString("password")
+            ),
+            userId
+        );
+
+        return rows.stream().findFirst();
+    }
+
+
+
+
+
+
+
+
     public User save(User user) {
         String sql = """
             INSERT INTO users (id, name, email, password)
