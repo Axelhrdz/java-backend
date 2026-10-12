@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Password;
 import com.example.demo.service.PassService;
+import com.example.demo.dto.GeneratedPasswordResponse;
 import com.example.demo.dto.PassRequest;
 
 import jakarta.validation.Valid;
@@ -32,12 +33,12 @@ public class PassController {
     @PostMapping("/generate")
     public ResponseEntity<?> generatePassword(@Valid @RequestBody PassRequest request, @RequestAttribute("userId") String userId) {
 
-        Password password = passService.passGenerator(userId, request);
+        GeneratedPasswordResponse result = passService.passGenerator(userId, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body (Map.of(
             "message", "Generate password endpoint",
             "title", request.getTitle(),
-            "password", password.getSecret()
+            "password", result.getPassword()
         ));
     }
 }

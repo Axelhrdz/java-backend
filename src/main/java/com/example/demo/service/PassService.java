@@ -6,7 +6,11 @@ import java.util.UUID;
 
 import com.example.demo.model.Password;
 import com.example.demo.repository.PasswordRepository;
+import com.example.demo.service.VaultEncryptionService;
+
 import com.example.demo.dto.PassRequest;
+import com.example.demo.dto.GeneratedPasswordResponse;
+
 import com.example.demo.exception.PassTitleAlreadyExistsException;
 
 import org.springframework.stereotype.Service;
@@ -16,12 +20,17 @@ import org.springframework.stereotype.Service;
 public class PassService {
     
     private final PasswordRepository passwordRepository;
+    private final VaultEncryptionService vaultEncryptionService;
 
-    public PassService(PasswordRepository passwordRepository) {
+    public PassService(
+        PasswordRepository passwordRepository,
+        VaultEncryptionService vaultEncryptionService
+    ) {
         this.passwordRepository = passwordRepository;
+        this.vaultEncryptionService = vaultEncryptionService;
     }
 
-    public Password passGenerator(String userId, PassRequest request) {
+    public GeneratedPasswordResponse passGenerator(String userId, PassRequest request) {
         //valida null/invalid user id
         if (userId == null || userId.isBlank()) {
             throw new IllegalArgumentException("User ID is required to generate a password");
@@ -47,15 +56,40 @@ public class PassService {
 
 
         //Generate password object
+        // Password password = new Password(
+        //     UUID.randomUUID().toString().replace("-", "").substring(0, 4),
+        //     userId,
+        //     request.getTitle(),
+        //     token.toString(),
+        //     Instant.now()
+        // );
+
+
+        String passwordId = UUID.randomUUID().toString().replace("-", "").substring(0, 4);
+        String generatedPassword = token.toString();
+
+        String encryptedSecret = vaultEncryptionService.encrypt(
+            generatedPassword,
+            userId,
+            passwordId
+        );
+
         Password password = new Password(
-            UUID.randomUUID().toString().replace("-", "").substring(0, 4),
+            passwordId,
             userId,
             request.getTitle(),
-            token.toString(),
+            encryptedSecret,
             Instant.now()
         );
 
+        passwordRepository.save(password);
 
-        return passwordRepository.save(password);
+
+        return new GeneratedPasswordResponse(
+            request.getTitle(),
+            generatedPassword
+        );
+
+        // return passwordRepository.save(password);
     }
 }
