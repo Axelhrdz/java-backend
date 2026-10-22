@@ -58,16 +58,6 @@ public class PassService {
         }
 
 
-        //Generate password object
-        // Password password = new Password(
-        //     UUID.randomUUID().toString().replace("-", "").substring(0, 4),
-        //     userId,
-        //     request.getTitle(),
-        //     token.toString(),
-        //     Instant.now()
-        // );
-
-
         String passwordId = UUID.randomUUID().toString().replace("-", "").substring(0, 4);
         String generatedPassword = token.toString();
 

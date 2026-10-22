@@ -58,12 +58,6 @@ public class PassController {
 
         User user = authService.authMe(userId);
 
-        // System.out.println("============");
-        // System.out.println(user.getName());
-        // System.out.println(user.getEmail());
-        // System.out.println(user.getId());
-        // System.out.println("============");
-
         List<PasswordVaultRow> passServiceTest = passService.GetPasswordsVault(user.getId());
 
         return ResponseEntity.status(HttpStatus.ACCEPTED)

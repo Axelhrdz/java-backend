@@ -80,37 +80,4 @@ public class PasswordRepository {
 
         return res;
     }
-
-
-
-
-
-
-
-    // public Optional<PasswordVaultResponse> getUserPassword(String userId) {
-
-    //     // String sql = """
-    //     //         SELECT * secret FROM passwords WHERE user_id = ?
-    //     //         """;
-    //     // jdbc.update(
-    //     //     sql,
-    //     //     userId
-    //     // );
-
-    //     String sql = "SELECT * from passwords where user_id = ?";
-
-    //     List<PasswordVaultResponse> rows = jdbc.query(
-    //         sql,
-    //         (rs, rowNum) -> new PasswordVaultResponse(
-    //             rs.getString("user_id"),
-    //             rs.getString("secret")
-    //         ),
-    //         userId
-    //     );
-
-        
-
-    //     return rows.stream().findFirst();
-    //     // return userId;
-    // }
 }
