@@ -4,15 +4,25 @@ import com.example.demo.model.Password;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+// import com.example.demo.dto.PasswordVaultResponse;
+// import com.example.demo.model.Password;
+import com.example.demo.dto.PasswordVaultRow;
+
+import com.example.demo.service.VaultEncryptionService;
+
 import java.sql.Timestamp;
+import java.util.List;
+// import java.util.Optional;
 
 @Repository
 public class PasswordRepository {
     
     private final JdbcTemplate jdbc;
+    private final VaultEncryptionService vaultEncryptionService;
 
-    public PasswordRepository(JdbcTemplate jdbc) {
+    public PasswordRepository(JdbcTemplate jdbc, VaultEncryptionService vaultEncryptionService) {
         this.jdbc = jdbc;
+        this.vaultEncryptionService = vaultEncryptionService;
     } 
 
     public boolean existsByUserIdAndTitle(String userId, String title) {
@@ -46,4 +56,61 @@ public class PasswordRepository {
 
         return password;
     }
+
+
+    //get all passwords per userId
+    public List<PasswordVaultRow> findAllByUserId(String userId) {
+        String sql = """
+                SELECT id, title, secret, user_id
+                FROM passwords
+                WHERE user_id = ?
+                """;
+
+        List<PasswordVaultRow> res = jdbc.query(
+            sql,
+            (rs, rowNum) -> new PasswordVaultRow(
+                rs.getString("id"),
+                rs.getString("title"),
+                vaultEncryptionService.decrypt(rs.getString("secret"), rs.getString("user_id"), rs.getString("id")),
+                rs.getString("user_id")
+            ),
+            userId
+        );
+
+
+        return res;
+    }
+
+
+
+
+
+
+
+    // public Optional<PasswordVaultResponse> getUserPassword(String userId) {
+
+    //     // String sql = """
+    //     //         SELECT * secret FROM passwords WHERE user_id = ?
+    //     //         """;
+    //     // jdbc.update(
+    //     //     sql,
+    //     //     userId
+    //     // );
+
+    //     String sql = "SELECT * from passwords where user_id = ?";
+
+    //     List<PasswordVaultResponse> rows = jdbc.query(
+    //         sql,
+    //         (rs, rowNum) -> new PasswordVaultResponse(
+    //             rs.getString("user_id"),
+    //             rs.getString("secret")
+    //         ),
+    //         userId
+    //     );
+
+        
+
+    //     return rows.stream().findFirst();
+    //     // return userId;
+    // }
 }
