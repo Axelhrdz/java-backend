@@ -60,7 +60,7 @@ public class PassController {
 
         List<PasswordVaultRow> passServiceTest = passService.GetPasswordsVault(user.getId());
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED)
+        return ResponseEntity.status(HttpStatus.OK)
             .body(Map.of(
                 "message", "Get passwords per user working",
                 "value", passServiceTest

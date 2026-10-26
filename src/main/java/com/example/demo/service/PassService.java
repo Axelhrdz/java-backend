@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import java.security.SecureRandom;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,6 +13,7 @@ import com.example.demo.repository.PasswordRepository;
 
 import com.example.demo.dto.PassRequest;
 import com.example.demo.dto.PasswordVaultRow;
+import com.example.demo.dto.EncryptedVaultRow;
 import com.example.demo.dto.GeneratedPasswordResponse;
 
 import com.example.demo.exception.PassTitleAlreadyExistsException;
@@ -93,10 +95,21 @@ public class PassService {
     public List<PasswordVaultRow> GetPasswordsVault (String userId) {
 
         //get user info
-        // User user = UserRepository.findById();
+
+        List<EncryptedVaultRow> secretsVault = passwordRepository.findAllByUserId(userId);
+        List<PasswordVaultRow> res = new ArrayList<>();
+
+        //create new password vault decrypting secret
+        for(EncryptedVaultRow item : secretsVault) {
+            res.add(new PasswordVaultRow(
+                item.id(),
+                item.title(),
+                vaultEncryptionService.decrypt(item.encryptedSecret(), item.userId(), item.id()),
+                item.userId()
+            ));
+        }
 
 
-        List<PasswordVaultRow> res = passwordRepository.findAllByUserId(userId);
         
         return res;
     }

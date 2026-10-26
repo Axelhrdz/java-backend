@@ -66,7 +66,7 @@ public class AuthController {
             "message", "User registered",
             "id", user.getId(),
             "email", user.getEmail(),
-            "token", token
+            "token", token //remove later on, on prod
         ));
     }
 
@@ -93,7 +93,7 @@ public class AuthController {
             .body(Map.of(
             "message", "Login sucessfully",
             "email", user.getEmail(),
-            "token", token
+            "token", token //remove later on on prod
         ));
 
     }
