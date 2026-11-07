@@ -4,11 +4,19 @@ import com.example.demo.model.Password;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+// import com.example.demo.dto.PasswordVaultResponse;
+// import com.example.demo.model.Password;
+// import com.example.demo.dto.PasswordVaultRow;
+import com.example.demo.dto.EncryptedVaultRow;
+
+// import com.example.demo.service.VaultEncryptionService;
+
 import java.sql.Timestamp;
+import java.util.List;
+// import java.util.Optional;
 
 @Repository
 public class PasswordRepository {
-    
     private final JdbcTemplate jdbc;
 
     public PasswordRepository(JdbcTemplate jdbc) {
@@ -45,5 +53,29 @@ public class PasswordRepository {
         );
 
         return password;
+    }
+
+
+    //get all passwords per userId
+    public List<EncryptedVaultRow> findAllByUserId(String userId) {
+        String sql = """
+                SELECT id, title, secret, user_id
+                FROM passwords
+                WHERE user_id = ?
+                """;
+
+        List<EncryptedVaultRow> res = jdbc.query(
+            sql,
+            (rs, rowNum) -> new EncryptedVaultRow(
+                rs.getString("id"),
+                rs.getString("title"),
+                rs.getString("secret"),
+                rs.getString("user_id")
+            ),
+            userId
+        );
+
+
+        return res;
     }
 }

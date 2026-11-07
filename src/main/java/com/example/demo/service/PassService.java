@@ -2,13 +2,18 @@ package com.example.demo.service;
 
 import java.security.SecureRandom;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import com.example.demo.model.Password;
 import com.example.demo.repository.PasswordRepository;
-import com.example.demo.service.VaultEncryptionService;
+// import com.example.demo.repository.UserRepository;
+// import com.example.demo.service.VaultEncryptionService;
 
 import com.example.demo.dto.PassRequest;
+import com.example.demo.dto.PasswordVaultRow;
+import com.example.demo.dto.EncryptedVaultRow;
 import com.example.demo.dto.GeneratedPasswordResponse;
 
 import com.example.demo.exception.PassTitleAlreadyExistsException;
@@ -55,16 +60,6 @@ public class PassService {
         }
 
 
-        //Generate password object
-        // Password password = new Password(
-        //     UUID.randomUUID().toString().replace("-", "").substring(0, 4),
-        //     userId,
-        //     request.getTitle(),
-        //     token.toString(),
-        //     Instant.now()
-        // );
-
-
         String passwordId = UUID.randomUUID().toString().replace("-", "").substring(0, 4);
         String generatedPassword = token.toString();
 
@@ -91,5 +86,31 @@ public class PassService {
         );
 
         // return passwordRepository.save(password);
+    }
+
+
+
+
+    // ----- Get vault of user passwords/secrets
+    public List<PasswordVaultRow> GetPasswordsVault (String userId) {
+
+        //get user info
+
+        List<EncryptedVaultRow> secretsVault = passwordRepository.findAllByUserId(userId);
+        List<PasswordVaultRow> res = new ArrayList<>();
+
+        //create new password vault decrypting secret
+        for(EncryptedVaultRow item : secretsVault) {
+            res.add(new PasswordVaultRow(
+                item.id(),
+                item.title(),
+                vaultEncryptionService.decrypt(item.encryptedSecret(), item.userId(), item.id()),
+                item.userId()
+            ));
+        }
+
+
+        
+        return res;
     }
 }
